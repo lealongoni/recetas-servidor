@@ -1,0 +1,6 @@
+﻿node_modules/
+.env
+storage/recetas/*
+!storage/recetas/.gitkeep
+data/*
+!data/.gitkeep

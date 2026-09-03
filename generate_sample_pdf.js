@@ -1,0 +1,51 @@
+﻿const fs = require('fs');
+const path = require('path');
+
+const pdfContent = `%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 212 >>
+stream
+BT
+/F1 22 Tf
+72 710 Td
+(CENTRO MEDICO - RECETA OFICIAL) Tj
+/F1 12 Tf
+0 -40 Td
+(Paciente: Juan Perez) Tj
+0 -25 Td
+(Medicamento: Amoxicilina 500mg - 1 comprimido cada 8hs por 7 dias.) Tj
+0 -25 Td
+(Firma y Sello: Dr. Medico Clinico - M.N. 123456) Tj
+0 -35 Td
+(Documento digital de validez medica.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000227 00000 n 
+0000000490 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+562
+%%EOF`;
+
+fs.writeFileSync(path.join(__dirname, 'receta_ejemplo.pdf'), pdfContent);
+console.log('PDF de prueba creado exitosamente: receta_ejemplo.pdf');

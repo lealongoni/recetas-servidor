@@ -1,0 +1,12 @@
+﻿services:
+  - type: web
+    name: recetas-medicas
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/index.js
+    envVars:
+      - key: MP_ACCESS_TOKEN
+        sync: false
+      - key: MP_CURRENCY_ID
+        value: ARS

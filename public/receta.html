@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receta Médica Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 1.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white;
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+    }
+
+    .header-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .header-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: white;
+    }
+
+    .header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header p {
+      font-size: 0.875rem;
+      opacity: 0.9;
+      margin-top: 0.25rem;
+    }
+
+    .content {
+      padding: 1.5rem;
+    }
+
+    .info-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.875rem;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-label {
+      color: #64748b;
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .price-tag {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0284c7;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-mp {
+      background-color: #009ee3;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 158, 227, 0.3);
+    }
+
+    .btn-mp:hover {
+      background-color: #0087c2;
+    }
+
+    .btn-download {
+      background-color: #10b981;
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-download:hover {
+      background-color: #059669;
+    }
+
+    .btn-test {
+      background-color: #f1f5f9;
+      color: #475569;
+      border: 1px dashed #cbd5e1;
+      margin-top: 0.75rem;
+      font-size: 0.825rem;
+      padding: 0.6rem;
+    }
+
+    .btn-test:hover {
+      background-color: #e2e8f0;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .alert-success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-expired {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .timer-container {
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      padding: 0.85rem;
+      border-radius: 0.75rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+      color: #92400e;
+    }
+
+    .timer-clock {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 0.25rem;
+      color: #b45309;
+    }
+
+    .security-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: #94a3b8;
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+
+    .loader {
+      border: 3px solid #e2e8f0;
+      border-top: 3px solid #0284c7;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 0.8s linear infinite;
+      margin: 2rem auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="mainCard">
+    <div class="header">
+      <div class="header-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <h1>Portal de Recetas Médicas</h1>
+      <p>Servicio de Consulta y Entrega Segura</p>
+    </div>
+
+    <div class="content" id="contentArea">
+      <div class="loader" id="loader"></div>
+    </div>
+  </div>
+
+  <script>
+    const pathParts = window.location.pathname.split('/');
+    const recetaId = pathParts[pathParts.length - 1];
+    const contentArea = document.getElementById('contentArea');
+    let timerInterval = null;
+
+    async function cargarEstado() {
+      try {
+        const res = await fetch(`/api/recetas/${recetaId}`);
+        if (!res.ok) {
+          contentArea.innerHTML = `
+            <div class="alert alert-expired">
+              <strong>Error:</strong> No se pudo encontrar la receta solicitada o el enlace es incorrecto.
+            </div>
+          `;
+          return;
+        }
+
+        const data = await res.json();
+        renderReceta(data);
+      } catch (err) {
+        contentArea.innerHTML = `
+          <div class="alert alert-expired">
+            Error de conexión al consultar el estado de la receta.
+          </div>
+        `;
+      }
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function renderReceta(data) {
+      if (timerInterval) clearInterval(timerInterval);
+
+      if (data.status === 'approved') {
+        if (data.isExpired) {
+          contentArea.innerHTML = `
+            <div class="alert alert-expired">
+              <strong>⚠️ Enlace Expirado</strong><br>
+              Por razones de confidencialidad y secreto médico, este enlace de descarga ha caducado (límite de 5 minutos).<br><br>
+              Por favor, comunícate con tu médico para que vuelva a enviarte un enlace de descarga renovado.
+            </div>
+            <div class="info-box">
+              <div class="info-row">
+                <span class="info-label">Paciente:</span>
+                <span class="info-value">${data.pacienteNombre}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Estado:</span>
+                <span class="info-value" style="color: #16a34a;">Pago Acreditado</span>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        let restantes = data.segundosRestantes;
+        contentArea.innerHTML = `
+          <div class="alert alert-success">
+            <strong>✓ ¡Pago Acreditado con Éxito!</strong><br>
+            Tu receta ya se encuentra lista y disponible para descargar a tu teléfono.
+          </div>
+
+          <div class="timer-container">
+            <div>⏱️ Tiempo disponible para descargar:</div>
+            <div class="timer-clock" id="timerClock">${formatTime(restantes)}</div>
+            <div style="font-size: 0.75rem; margin-top: 0.35rem; color: #a16207;">
+              (El enlace expirará en 5 minutos por seguridad médica)
+            </div>
+          </div>
+
+          <a href="/api/recetas/${recetaId}/download" class="btn btn-download" download>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Descargar Receta (PDF)
+          </a>
+
+          <div class="security-note">
+            🔒 Descarga cifrada y protegida
+          </div>
+        `;
+
+        timerInterval = setInterval(() => {
+          restantes--;
+          const el = document.getElementById('timerClock');
+          if (el) el.textContent = formatTime(Math.max(0, restantes));
+          if (restantes <= 0) {
+            clearInterval(timerInterval);
+            cargarEstado();
+          }
+        }, 1000);
+
+      } else {
+        // PENDIENTE DE PAGO
+        contentArea.innerHTML = `
+          <div class="info-box">
+            <div class="info-row">
+              <span class="info-label">Paciente:</span>
+              <span class="info-value">${data.pacienteNombre}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Concepto:</span>
+              <span class="info-value">Consulta Médica / Receta</span>
+            </div>
+            <div class="info-row" style="margin-top: 0.75rem; border-top: 1px dashed #e2e8f0; padding-top: 0.75rem;">
+              <span class="info-label" style="align-self: center;">Monto a abonar:</span>
+              <span class="price-tag">$${Number(data.monto).toLocaleString('es-AR')}</span>
+            </div>
+          </div>
+
+          <a href="${data.mpInitPoint}" class="btn btn-mp" id="btnPayMP">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            Pagar con Mercado Pago
+          </a>
+
+          <button class="btn btn-test" id="btnSimular">
+            🧪 Simular Pago Aprobado (Prueba Inmediata)
+          </button>
+
+          <div class="security-note">
+            🛡️ Pago procesado de forma 100% segura por Mercado Pago
+          </div>
+        `;
+
+        document.getElementById('btnSimular')?.addEventListener('click', async () => {
+          try {
+            const r = await fetch(`/api/recetas/${recetaId}/simular-pago`, { method: 'POST' });
+            if (r.ok) {
+              cargarEstado();
+            }
+          } catch(e) {
+            alert('Error al simular pago: ' + e.message);
+          }
+        });
+      }
+    }
+
+    // Comprobar parámetros de retorno de Mercado Pago
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('status') === 'approved' || urlParams.get('collection_status') === 'approved') {
+      // Si Mercado Pago redirigió con approved, simular o procesar pago de inmediato
+      fetch(`/api/recetas/${recetaId}/simular-pago`, { method: 'POST' }).then(() => cargarEstado());
+    } else {
+      cargarEstado();
+    }
+  </script>
+</body>
+</html>
