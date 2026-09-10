@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -363,14 +363,39 @@
             Pagar con Mercado Pago
           </a>
 
-          <button class="btn btn-test" id="btnSimular">
-            🧪 Simular Pago Aprobado (Prueba Inmediata)
-          </button>
+          ${!data.mpConfigurado ? `
+            <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 0.75rem; padding: 0.75rem; margin-top: 0.85rem; font-size: 0.8rem; color: #92400e; text-align: center;">
+              <strong>ℹ️ Modo de Prueba (Sandbox)</strong><br>
+              Aún no configuraste tu <code>MP_ACCESS_TOKEN</code> en Render.<br>
+              Al tocar el botón azul se simulará el pago automáticamente para que pruebes la descarga.
+            </div>
+          ` : `
+            <button class="btn btn-test" id="btnSimular">
+              🧪 Simular Pago Aprobado (Modo Test)
+            </button>
+          `}
 
           <div class="security-note">
             🛡️ Pago procesado de forma 100% segura por Mercado Pago
           </div>
         `;
+
+        // Si no está configurado MP real, el botón simula el pago de inmediato
+        if (!data.mpConfigurado) {
+          document.getElementById('btnPayMP')?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnPayMP');
+            if (btn) btn.textContent = 'Procesando pago de prueba...';
+            try {
+              const r = await fetch(`/api/recetas/${recetaId}/simular-pago`, { method: 'POST' });
+              if (r.ok) {
+                cargarEstado();
+              }
+            } catch(err) {
+              alert('Error simulando pago: ' + err.message);
+            }
+          });
+        }
 
         document.getElementById('btnSimular')?.addEventListener('click', async () => {
           try {
@@ -385,10 +410,9 @@
       }
     }
 
-    // Comprobar parámetros de retorno de Mercado Pago
+    // Comprobar parámetros de retorno de Mercado Pago o simulación directa
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('status') === 'approved' || urlParams.get('collection_status') === 'approved') {
-      // Si Mercado Pago redirigió con approved, simular o procesar pago de inmediato
+    if (urlParams.get('status') === 'approved' || urlParams.get('collection_status') === 'approved' || urlParams.get('simular_mp') === 'true') {
       fetch(`/api/recetas/${recetaId}/simular-pago`, { method: 'POST' }).then(() => cargarEstado());
     } else {
       cargarEstado();

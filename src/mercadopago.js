@@ -1,19 +1,30 @@
-﻿const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
+const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 
-const accessToken = process.env.MP_ACCESS_TOKEN || '';
-const isConfigured = Boolean(accessToken && accessToken !== 'TU_MERCADO_PAGO_ACCESS_TOKEN');
+function getAccessToken() {
+  return (process.env.MP_ACCESS_TOKEN || '').trim();
+}
 
-let client = null;
-if (isConfigured) {
-  client = new MercadoPagoConfig({ accessToken });
+function isConfigured() {
+  const token = getAccessToken();
+  return Boolean(token && token !== 'TU_MERCADO_PAGO_ACCESS_TOKEN');
+}
+
+function getClient() {
+  const token = getAccessToken();
+  if (token && token !== 'TU_MERCADO_PAGO_ACCESS_TOKEN') {
+    return new MercadoPagoConfig({ accessToken: token });
+  }
+  return null;
 }
 
 async function crearPreferencia({ recetaId, pacienteNombre, monto, baseUrl }) {
-  if (!isConfigured) {
-    console.log('[MercadoPago] Modo simulado (Token no configurado en .env). Generando link de prueba directo.');
+  const client = getClient();
+  if (!client) {
+    console.log('[MercadoPago] Modo simulado (Token MP_ACCESS_TOKEN no configurado en entorno).');
     return {
       id: `mock-pref-${recetaId}`,
-      init_point: `${baseUrl}/receta/${recetaId}?simular_mp=true`
+      init_point: `${baseUrl}/receta/${recetaId}?simular_mp=true`,
+      isMock: true
     };
   }
 
@@ -51,7 +62,8 @@ async function crearPreferencia({ recetaId, pacienteNombre, monto, baseUrl }) {
 }
 
 async function consultarPago(paymentId) {
-  if (!isConfigured) {
+  const client = getClient();
+  if (!client) {
     return { status: 'approved' };
   }
   try {

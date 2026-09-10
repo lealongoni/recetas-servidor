@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const db = require('./db');
-const { crearPreferencia, consultarPago } = require('./mercadopago');
+const { crearPreferencia, consultarPago, isConfigured } = require('./mercadopago');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -144,6 +144,7 @@ app.get('/api/recetas/:id', (req, res) => {
     monto: receta.monto,
     status: receta.status,
     mpInitPoint: receta.mpInitPoint,
+    mpConfigurado: isConfigured(),
     paidAt: receta.paidAt,
     downloadExpiresAt: receta.downloadExpiresAt,
     segundosRestantes,
