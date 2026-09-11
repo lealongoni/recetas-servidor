@@ -259,6 +259,9 @@ app.all('/api/webhooks/mercadopago', async (req, res) => {
 
 // 6. RUTA PARA SERVIR EL PORTAL WEB DEL PACIENTE
 app.get('/receta/:id', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   res.sendFile('receta.html', { root: path.join(__dirname, '..', 'public') });
 });
 
