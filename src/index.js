@@ -180,29 +180,48 @@ app.get('/api/recetas/:id/download', (req, res) => {
   stream.pipe(res);
 });
 
-// 4. SIMULAR PAGO (Para pruebas rápidas en desarrollo y demostración)
-app.post('/api/recetas/:id/simular-pago', (req, res) => {
-  const receta = db.getById(req.params.id);
-  if (!receta) {
-    return res.status(404).json({ error: 'Receta no encontrada' });
+// 4. VERIFICAR PAGO CON MERCADO PAGO (Llamado tras el retorno del checkout)
+app.post('/api/recetas/:id/verificar-pago', async (req, res) => {
+  try {
+    const receta = db.getById(req.params.id);
+    if (!receta) {
+      return res.status(404).json({ error: 'Receta no encontrada' });
+    }
+
+    if (receta.status === 'approved') {
+      return res.json({ success: true, message: 'Pago ya acreditado.', receta });
+    }
+
+    const paymentId = req.body.paymentId || req.query.payment_id || req.query['data.id'];
+    if (!paymentId) {
+      return res.status(400).json({ error: 'Identificador de pago no provisto' });
+    }
+
+    // Consultar el estado real en la API de Mercado Pago
+    const payment = await consultarPago(paymentId);
+    if (payment && payment.status === 'approved') {
+      const now = new Date();
+      const expires = new Date(now.getTime() + 5 * 60 * 1000);
+
+      const updated = db.update(receta.id, {
+        status: 'approved',
+        paidAt: now.toISOString(),
+        downloadExpiresAt: expires.toISOString(),
+        mpPaymentId: String(paymentId)
+      });
+
+      return res.json({
+        success: true,
+        message: 'Pago verificado con éxito. El link de descarga expira en 5 minutos.',
+        receta: updated
+      });
+    }
+
+    return res.status(400).json({ error: 'El pago no figura como aprobado en Mercado Pago' });
+  } catch (error) {
+    console.error('[Verificar Pago] Error:', error);
+    return res.status(500).json({ error: 'Error al verificar el estado del pago' });
   }
-
-  const cincoMinutosMs = 5 * 60 * 1000;
-  const now = new Date();
-  const expires = new Date(now.getTime() + cincoMinutosMs);
-
-  const updated = db.update(receta.id, {
-    status: 'approved',
-    paidAt: now.toISOString(),
-    downloadExpiresAt: expires.toISOString(),
-    mpPaymentId: 'simulado-' + Date.now()
-  });
-
-  res.json({
-    success: true,
-    message: 'Pago acreditado con éxito. El link de descarga expira en 5 minutos.',
-    receta: updated
-  });
 });
 
 // 5. WEBHOOK DE MERCADO PAGO

@@ -1,4 +1,4 @@
-﻿const http = require('http');
+const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
@@ -95,20 +95,26 @@ async function runTests() {
   }
   console.log('✓ Descarga correctamente denegada antes del pago.');
 
-  // 4. TEST SIMULAR PAGO APROBADO (5 minutos de expiración)
-  console.log('\n[TEST 4] Simular pago aprobado...');
+  // 4. TEST VERIFICAR PAGO APROBADO (5 minutos de expiración)
+  console.log('\n[TEST 4] Verificar pago aprobado...');
   const payRes = await new Promise((resolve, reject) => {
+    const postData = JSON.stringify({ paymentId: 'test-payment-123' });
     const req = http.request({
       hostname: 'localhost',
       port: 3001,
-      path: `/api/recetas/${recetaId}/simular-pago`,
-      method: 'POST'
+      path: `/api/recetas/${recetaId}/verificar-pago`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData)
+      }
     }, res => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => resolve({ statusCode: res.statusCode, body: JSON.parse(data) }));
     });
     req.on('error', reject);
+    req.write(postData);
     req.end();
   });
   console.log('Respuesta pago:', payRes.body);

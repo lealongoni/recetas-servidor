@@ -145,18 +145,7 @@
       background-color: #059669;
     }
 
-    .btn-test {
-      background-color: #f1f5f9;
-      color: #475569;
-      border: 1px dashed #cbd5e1;
-      margin-top: 0.75rem;
-      font-size: 0.825rem;
-      padding: 0.6rem;
-    }
 
-    .btn-test:hover {
-      background-color: #e2e8f0;
-    }
 
     .alert {
       padding: 1rem;
@@ -363,60 +352,43 @@
             Pagar con Mercado Pago
           </a>
 
-          ${!data.mpConfigurado ? `
-            <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 0.75rem; padding: 0.75rem; margin-top: 0.85rem; font-size: 0.8rem; color: #92400e; text-align: center;">
-              <strong>ℹ️ Modo de Prueba (Sandbox)</strong><br>
-              Aún no configuraste tu <code>MP_ACCESS_TOKEN</code> en Render.<br>
-              Al tocar el botón azul se simulará el pago automáticamente para que pruebes la descarga.
-            </div>
-          ` : `
-            <button class="btn btn-test" id="btnSimular">
-              🧪 Simular Pago Aprobado (Modo Test)
-            </button>
-          `}
-
           <div class="security-note">
             🛡️ Pago procesado de forma 100% segura por Mercado Pago
           </div>
         `;
-
-        // Si no está configurado MP real, el botón simula el pago de inmediato
-        if (!data.mpConfigurado) {
-          document.getElementById('btnPayMP')?.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnPayMP');
-            if (btn) btn.textContent = 'Procesando pago de prueba...';
-            try {
-              const r = await fetch(`/api/recetas/${recetaId}/simular-pago`, { method: 'POST' });
-              if (r.ok) {
-                cargarEstado();
-              }
-            } catch(err) {
-              alert('Error simulando pago: ' + err.message);
-            }
-          });
-        }
-
-        document.getElementById('btnSimular')?.addEventListener('click', async () => {
-          try {
-            const r = await fetch(`/api/recetas/${recetaId}/simular-pago`, { method: 'POST' });
-            if (r.ok) {
-              cargarEstado();
-            }
-          } catch(e) {
-            alert('Error al simular pago: ' + e.message);
-          }
-        });
       }
     }
 
-    // Comprobar parámetros de retorno de Mercado Pago o simulación directa
+    let pollInterval = null;
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('status') === 'approved' || urlParams.get('collection_status') === 'approved' || urlParams.get('simular_mp') === 'true') {
-      fetch(`/api/recetas/${recetaId}/simular-pago`, { method: 'POST' }).then(() => cargarEstado());
+    const paymentId = urlParams.get('payment_id') || urlParams.get('collection_id');
+    const status = urlParams.get('status') || urlParams.get('collection_status');
+
+    // Si vuelve de Mercado Pago con datos de pago, verificarlo con la API
+    if (paymentId && (status === 'approved' || !status)) {
+      fetch(`/api/recetas/${recetaId}/verificar-pago`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId })
+      }).finally(() => {
+        cargarEstado();
+      });
     } else {
       cargarEstado();
     }
+
+    // Auto-actualizar cada 4 segundos por si el webhook se procesa mientras el paciente tiene la pantalla abierta
+    pollInterval = setInterval(() => {
+      fetch(`/api/recetas/${recetaId}`)
+        .then(r => r.json())
+        .then(d => {
+          if (d.status === 'approved') {
+            clearInterval(pollInterval);
+            cargarEstado();
+          }
+        })
+        .catch(() => {});
+    }, 4000);
   </script>
 </body>
 </html>
