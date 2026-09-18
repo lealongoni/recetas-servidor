@@ -63,6 +63,7 @@ app.post('/api/recetas/upload', upload.single('pdf'), async (req, res) => {
 
     const pacienteNombre = (req.body.paciente || 'Paciente').trim();
     const telefono = (req.body.telefono || '').replace(/\D/g, '');
+    const email = (req.body.email || '').trim();
     const monto = parseFloat(req.body.monto || 0);
 
     if (isNaN(monto) || monto <= 0) {
@@ -84,6 +85,7 @@ app.post('/api/recetas/upload', upload.single('pdf'), async (req, res) => {
       id: recetaId,
       pacienteNombre,
       telefono,
+      email,
       monto,
       archivoNombreOriginal: req.file.originalname,
       archivoGuardado: req.file.filename,
@@ -111,7 +113,9 @@ app.post('/api/recetas/upload', upload.single('pdf'), async (req, res) => {
       whatsappUrl,
       textoWhatsApp,
       monto,
-      pacienteNombre
+      pacienteNombre,
+      telefono,
+      email
     });
   } catch (error) {
     console.error('Error al subir receta:', error);

@@ -211,6 +211,48 @@
       background: #20bd5a;
     }
 
+    .btn-email {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      background: #0284c7;
+      color: white;
+      text-decoration: none;
+      padding: 0.85rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .btn-email:hover {
+      background: #0369a1;
+    }
+
+    .btn-sms {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      background: #0d9488;
+      color: white;
+      text-decoration: none;
+      padding: 0.85rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .btn-sms:hover {
+      background: #0f766e;
+    }
+
     .btn-copy {
       display: flex;
       align-items: center;
@@ -269,10 +311,16 @@
           <input type="text" id="paciente" name="paciente" placeholder="Ej: Juan Pérez" required>
         </div>
 
-        <!-- TELEFONO WHATSAPP -->
+        <!-- TELEFONO WHATSAPP Y SMS -->
         <div class="form-group">
-          <label for="telefono">Teléfono WhatsApp del Paciente</label>
+          <label for="telefono">Teléfono WhatsApp / SMS del Paciente (opcional)</label>
           <input type="tel" id="telefono" name="telefono" placeholder="Ej: 5491123456789 (con código de país)">
+        </div>
+
+        <!-- EMAIL DEL PACIENTE -->
+        <div class="form-group">
+          <label for="email">Email del Paciente (opcional)</label>
+          <input type="email" id="email" name="email" placeholder="Ej: paciente@correo.com">
         </div>
 
         <!-- MONTO -->
@@ -307,6 +355,14 @@
           Enviar por WhatsApp al Paciente
         </a>
 
+        <a href="#" class="btn-email" id="btnEmail">
+          ✉️ Enviar por Email al Paciente
+        </a>
+
+        <a href="#" class="btn-sms" id="btnSms">
+          💬 Enviar por SMS al Paciente
+        </a>
+
         <button type="button" class="btn-copy" id="btnCopy">
           📋 Copiar Enlace
         </button>
@@ -325,6 +381,8 @@
     const btnSubmit = document.getElementById('btnSubmit');
     const resultCard = document.getElementById('resultCard');
     const btnWhatsApp = document.getElementById('btnWhatsApp');
+    const btnEmail = document.getElementById('btnEmail');
+    const btnSms = document.getElementById('btnSms');
     const btnCopy = document.getElementById('btnCopy');
     const btnOpenPatient = document.getElementById('btnOpenPatient');
     const linkPreview = document.getElementById('linkPreview');
@@ -361,9 +419,23 @@
         }
 
         currentUrlPaciente = data.urlPaciente;
+        const paciente = data.pacienteNombre || 'Paciente';
+        const telefono = data.telefono || '';
+        const email = data.email || '';
+
         linkPreview.textContent = currentUrlPaciente;
         btnWhatsApp.href = data.whatsappUrl;
         btnOpenPatient.href = currentUrlPaciente;
+
+        // Configurar Enlace de Email
+        const emailSubject = encodeURIComponent(`Receta médica para ${paciente}`);
+        const emailBody = encodeURIComponent(`Hola ${paciente},\n\nAquí tienes el enlace para abonar y descargar tu receta médica:\n${currentUrlPaciente}\n\n(Una vez acreditado el pago en Mercado Pago, tendrás 5 minutos para descargar el archivo PDF).`);
+        btnEmail.href = `mailto:${encodeURIComponent(email)}?subject=${emailSubject}&body=${emailBody}`;
+
+        // Configurar Enlace de SMS
+        const cleanTel = telefono.replace(/\D/g, '');
+        const smsBody = encodeURIComponent(`Hola ${paciente}, aquí tienes tu receta médica: ${currentUrlPaciente}`);
+        btnSms.href = cleanTel ? `sms:${cleanTel}?body=${smsBody}` : `sms:?body=${smsBody}`;
 
         resultCard.style.display = 'block';
         resultCard.scrollIntoView({ behavior: 'smooth' });
