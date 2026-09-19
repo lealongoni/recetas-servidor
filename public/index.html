@@ -290,7 +290,7 @@
         <img src="/logo.png" alt="Logo" style="width: 72px; height: 72px; object-fit: contain; margin-bottom: 0.5rem;">
         <div><span class="badge-medic">🩺 Portal Profesional</span></div>
         <h1>Nueva Receta Médica</h1>
-        <p class="subtitle">Sube la receta, fija el valor y envía el link por WhatsApp</p>
+        <p class="subtitle">Sube la receta, fija el valor y envía el link por WhatsApp, Email o SMS</p>
       </div>
 
       <form id="recetaForm">
@@ -431,11 +431,13 @@
         const emailSubject = encodeURIComponent(`Receta médica para ${paciente}`);
         const emailBody = encodeURIComponent(`Hola ${paciente},\n\nAquí tienes el enlace para abonar y descargar tu receta médica:\n${currentUrlPaciente}\n\n(Una vez acreditado el pago en Mercado Pago, tendrás 5 minutos para descargar el archivo PDF).`);
         btnEmail.href = `mailto:${encodeURIComponent(email)}?subject=${emailSubject}&body=${emailBody}`;
+        btnEmail.innerHTML = '✉️ Enviar por Email' + (email ? ' (' + email + ')' : '');
 
         // Configurar Enlace de SMS
         const cleanTel = telefono.replace(/\D/g, '');
         const smsBody = encodeURIComponent(`Hola ${paciente}, aquí tienes tu receta médica: ${currentUrlPaciente}`);
         btnSms.href = cleanTel ? `sms:${cleanTel}?body=${smsBody}` : `sms:?body=${smsBody}`;
+        btnSms.innerHTML = '💬 Enviar por SMS' + (cleanTel ? ' (' + cleanTel + ')' : '');
 
         resultCard.style.display = 'block';
         resultCard.scrollIntoView({ behavior: 'smooth' });
