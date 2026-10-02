@@ -280,6 +280,136 @@
       word-break: break-all;
       margin-top: 0.5rem;
     }
+
+    /* SECCIÓN DE TRANSFERENCIAS PENDIENTES */
+    .pending-card {
+      display: none;
+      background: #fffbeb;
+      border: 2px solid #f59e0b;
+      border-radius: 1rem;
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+    }
+
+    .pending-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .pending-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .pending-badge {
+      background: #ef4444;
+      color: white;
+      border-radius: 9999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .transfer-item {
+      background: white;
+      border: 1px solid #fef3c7;
+      border-radius: 0.75rem;
+      padding: 0.85rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .transfer-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .transfer-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .transfer-amount {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #0284c7;
+    }
+
+    .transfer-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-approve {
+      flex: 2;
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 0.55rem;
+      border-radius: 0.5rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: background 0.2s;
+    }
+
+    .btn-approve:hover {
+      background: #059669;
+    }
+
+    .btn-reject {
+      flex: 1;
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      padding: 0.55rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-reject:hover {
+      background: #fee2e2;
+      color: #ef4444;
+      border-color: #fca5a5;
+    }
+
+    /* NOTIFICACIÓN EN TIEMPO REAL */
+    .toast-notify {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      max-width: 360px;
+      background: #0f172a;
+      color: white;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      z-index: 9999;
+      display: none;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -291,6 +421,17 @@
         <div><span class="badge-medic">🩺 Portal Profesional</span></div>
         <h1>Nueva Receta Médica</h1>
         <p class="subtitle">Sube la receta, fija el valor y envía el link por WhatsApp, Email o SMS</p>
+      </div>
+
+      <!-- SECCIÓN DE TRANSFERENCIAS PENDIENTES DE APROBACIÓN -->
+      <div class="pending-card" id="pendingCard">
+        <div class="pending-header">
+          <div class="pending-title">
+            <span>🔔 Transferencias para Aprobar</span>
+          </div>
+          <span class="pending-badge" id="pendingCount">0</span>
+        </div>
+        <div id="pendingList"></div>
       </div>
 
       <form id="recetaForm">
@@ -464,6 +605,109 @@
         }, 2000);
       }
     });
+
+    // GESTIÓN DE TRANSFERENCIAS PENDIENTES
+    const pendingCard = document.getElementById('pendingCard');
+    const pendingList = document.getElementById('pendingList');
+    const pendingCount = document.getElementById('pendingCount');
+
+    async function cargarTransferenciasPendientes() {
+      try {
+        const res = await fetch('/api/recetas/pending-transfers');
+        if (!res.ok) return;
+        const transfers = await res.json();
+
+        if (transfers.length === 0) {
+          pendingCard.style.display = 'none';
+          return;
+        }
+
+        pendingCount.textContent = transfers.length;
+        pendingList.innerHTML = transfers.map(t => `
+          <div class="transfer-item">
+            <div class="transfer-info">
+              <span class="transfer-name">👤 ${t.pacienteNombre}</span>
+              <span class="transfer-amount">$${Number(t.monto).toLocaleString('es-AR')}</span>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748b;">
+              Informada: ${new Date(t.transferReportedAt || t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <div class="transfer-actions">
+              <button type="button" class="btn-approve" onclick="aprobarTransferencia('${t.id}')">
+                ✓ Aprobar Pago
+              </button>
+              <button type="button" class="btn-reject" onclick="rechazarTransferencia('${t.id}')">
+                ✕ Rechazar
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        pendingCard.style.display = 'block';
+      } catch (e) {
+        console.error('Error cargando transferencias:', e);
+      }
+    }
+
+    async function aprobarTransferencia(recetaId) {
+      if (!confirm('¿Confirmas que recibiste la transferencia y deseas habilitar la receta? El paciente tendrá 5 minutos para descargarla.')) return;
+      try {
+        const res = await fetch(`/api/recetas/${recetaId}/approve-transfer`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          mostrarToast('✅ Transferencia aprobada con éxito. El paciente ya puede descargar su receta.');
+          cargarTransferenciasPendientes();
+        } else {
+          alert(data.error || 'Error al aprobar transferencia');
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function rechazarTransferencia(recetaId) {
+      if (!confirm('¿Deseas rechazar este aviso de transferencia?')) return;
+      try {
+        await fetch(`/api/recetas/${recetaId}/reject-transfer`, { method: 'POST' });
+        cargarTransferenciasPendientes();
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    function mostrarToast(mensaje) {
+      const toast = document.getElementById('toastNotify');
+      if (toast) {
+        toast.textContent = mensaje;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 5000);
+      }
+    }
+
+    // CONECTAR A EVENTOS EN VIVO (SSE)
+    cargarTransferenciasPendientes();
+    setInterval(cargarTransferenciasPendientes, 10000);
+
+    try {
+      const evtSource = new EventSource('/api/events');
+      evtSource.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          if (data.type === 'transfer_reported') {
+            mostrarToast(`🔔 ¡Nueva transferencia de ${data.pacienteNombre} por $${data.monto}!`);
+            cargarTransferenciasPendientes();
+          } else if (data.type === 'mp_payment_approved') {
+            mostrarToast(`✅ ¡Pago acreditado en Mercado Pago de ${data.pacienteNombre} por $${data.monto}!`);
+          } else if (data.type === 'transfer_approved') {
+            cargarTransferenciasPendientes();
+          }
+        } catch (err) {}
+      };
+    } catch (e) {
+      console.log('SSE no soportado o error:', e);
+    }
   </script>
+
+  <div class="toast-notify" id="toastNotify"></div>
 </body>
 </html>

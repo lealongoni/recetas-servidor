@@ -136,17 +136,194 @@
       background-color: #0087c2;
     }
 
-    .btn-download {
-      background-color: #10b981;
+    .btn-transfer-confirm {
+      background-color: #0d9488;
       color: white;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+      margin-top: 0.5rem;
+    }
+
+    .btn-transfer-confirm:hover {
+      background-color: #0f766e;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+      font-size: 1.1rem;
+      padding: 1.1rem;
     }
 
     .btn-download:hover {
-      background-color: #059669;
+      background: #047857;
     }
 
+    .btn-wa-notify {
+      background: #25d366;
+      color: white;
+      text-decoration: none;
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+      padding: 0.75rem;
+    }
 
+    /* AVISO IMPORTANTE DE 5 MINUTOS (GRÁFICO DESTACADO) */
+    .urgent-banner {
+      background: #fff7ed;
+      border: 2px solid #f97316;
+      border-radius: 0.875rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.12);
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .urgent-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .urgent-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #c2410c;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .urgent-text {
+      font-size: 0.825rem;
+      color: #9a3412;
+      line-height: 1.35;
+    }
+
+    .urgent-text strong {
+      color: #7c2d12;
+      background: #fed7aa;
+      padding: 0.1rem 0.35rem;
+      border-radius: 0.25rem;
+    }
+
+    /* PESTAÑAS DE PAGO */
+    .tabs-label {
+      font-size: 0.825rem;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .tabs-header {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: #f1f5f9;
+      padding: 0.35rem;
+      border-radius: 0.75rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.7rem 0.5rem;
+      border: none;
+      background: transparent;
+      border-radius: 0.6rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      font-weight: 700;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CAJA DE DATOS BANCARIOS */
+    .bank-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.85rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .alias-box {
+      background: #ffffff;
+      border: 2px dashed #0284c7;
+      border-radius: 0.75rem;
+      padding: 0.85rem;
+      text-align: center;
+      margin: 0.75rem 0;
+    }
+
+    .alias-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0369a1;
+      letter-spacing: 0.02em;
+      word-break: break-all;
+    }
+
+    .btn-copy-alias {
+      margin-top: 0.5rem;
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #bae6fd;
+      border-radius: 0.5rem;
+      padding: 0.45rem 1rem;
+      font-size: 0.825rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-alias:hover {
+      background: #bae6fd;
+    }
+
+    .bank-detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .bank-detail-row:last-child {
+      margin-bottom: 0;
+    }
 
     .alert {
       padding: 1rem;
@@ -170,20 +347,28 @@
 
     .timer-container {
       background: #fffbeb;
-      border: 1px solid #fef3c7;
-      padding: 0.85rem;
-      border-radius: 0.75rem;
+      border: 2px solid #f59e0b;
+      padding: 1.1rem 1rem;
+      border-radius: 0.875rem;
       text-align: center;
       margin-bottom: 1.25rem;
-      color: #92400e;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+      animation: pulseBorder 2s infinite;
+    }
+
+    @keyframes pulseBorder {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
     }
 
     .timer-clock {
-      font-size: 1.4rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
       letter-spacing: 0.05em;
-      margin-top: 0.25rem;
+      margin: 0.3rem 0;
       color: #b45309;
+      font-variant-numeric: tabular-nums;
     }
 
     .security-note {
@@ -234,6 +419,13 @@
     const recetaId = pathParts[pathParts.length - 1];
     const contentArea = document.getElementById('contentArea');
     let timerInterval = null;
+    let pollInterval = null;
+    let currentBankConfig = {
+      alias: 'lnd.longoni.uala',
+      cvu: 'lnd.longoni.uala',
+      titular: 'Leandro Longoni',
+      banco: 'Ualá'
+    };
 
     async function cargarEstado() {
       try {
@@ -248,6 +440,9 @@
         }
 
         const data = await res.json();
+        if (data.bankConfig) {
+          currentBankConfig = { ...currentBankConfig, ...data.bankConfig };
+        }
         renderReceta(data);
       } catch (err) {
         contentArea.innerHTML = `
@@ -267,13 +462,14 @@
     function renderReceta(data) {
       if (timerInterval) clearInterval(timerInterval);
 
+      // CASO 1: PAGO APROBADO (MERCADO PAGO O TRANSFERENCIA)
       if (data.status === 'approved') {
         if (data.isExpired) {
           contentArea.innerHTML = `
             <div class="alert alert-expired">
               <strong>⚠️ Enlace Expirado</strong><br>
-              Por razones de confidencialidad y secreto médico, este enlace de descarga ha caducado (límite de 5 minutos).<br><br>
-              Por favor, comunícate con tu médico para que vuelva a enviarte un enlace de descarga renovado.
+              Por razones de confidencialidad y secreto médico, este enlace de descarga ha caducado (límite estricto de 5 minutos transcurrido).<br><br>
+              Por favor, comunícate con tu médico para que vuelva a renovar el enlace.
             </div>
             <div class="info-box">
               <div class="info-row">
@@ -293,26 +489,29 @@
         contentArea.innerHTML = `
           <div class="alert alert-success">
             <strong>✓ ¡Pago Acreditado con Éxito!</strong><br>
-            Tu receta ya se encuentra lista y disponible para descargar a tu teléfono.
+            Tu receta médica ya está firmada y disponible para descargar inmediatamente.
           </div>
 
+          <!-- TEMPORIZADOR ENFÁTICO DE 5 MINUTOS -->
           <div class="timer-container">
-            <div>⏱️ Tiempo disponible para descargar:</div>
+            <div style="font-weight: 700; font-size: 0.9rem; color: #92400e;">
+              ⏱️ TIEMPO DISPONIBLE PARA DESCARGAR:
+            </div>
             <div class="timer-clock" id="timerClock">${formatTime(restantes)}</div>
-            <div style="font-size: 0.75rem; margin-top: 0.35rem; color: #a16207;">
-              (El enlace expirará en 5 minutos por seguridad médica)
+            <div style="font-size: 0.8rem; color: #b45309; font-weight: 600;">
+              ⚠️ ¡Descárgala y guárdala ahora en tu teléfono antes de que el contador llegue a cero!
             </div>
           </div>
 
           <a href="/api/recetas/${recetaId}/download" class="btn btn-download" download>
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
             </svg>
-            Descargar Receta (PDF)
+            Descargar Receta Médica (PDF)
           </a>
 
           <div class="security-note">
-            🔒 Descarga cifrada y protegida
+            🔒 Descarga cifrada y confidencial
           </div>
         `;
 
@@ -326,39 +525,228 @@
           }
         }, 1000);
 
-      } else {
-        // PENDIENTE DE PAGO
+        return;
+      }
+
+      // CASO 2: TRANSFERENCIA INFORMADA (ESPERANDO APROBACIÓN DE SECRETARIA/MÉDICO)
+      if (data.status === 'transfer_pending') {
+        const montoFmt = Number(data.monto).toLocaleString('es-AR');
+        const waMsg = encodeURIComponent(`Hola Dr., acabo de transferir $${montoFmt} por la receta médica de ${data.pacienteNombre}. Aguardo la habilitación de la descarga. Muchas gracias.`);
+        
         contentArea.innerHTML = `
+          <div class="urgent-banner">
+            <div class="urgent-icon">⏳</div>
+            <div>
+              <div class="urgent-title">Transferencia Informada</div>
+              <div class="urgent-text">
+                Tu aviso de transferencia fue recibido. En cuanto tu médico o secretaria corrobore el ingreso en la cuenta, <strong>esta pantalla se actualizará sola</strong> y tendrás <strong>5 minutos</strong> para descargar tu receta.
+              </div>
+            </div>
+          </div>
+
           <div class="info-box">
             <div class="info-row">
               <span class="info-label">Paciente:</span>
               <span class="info-value">${data.pacienteNombre}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">Concepto:</span>
-              <span class="info-value">Consulta Médica / Receta</span>
+              <span class="info-label">Monto informado:</span>
+              <span class="info-value">$${montoFmt}</span>
             </div>
-            <div class="info-row" style="margin-top: 0.75rem; border-top: 1px dashed #e2e8f0; padding-top: 0.75rem;">
-              <span class="info-label" style="align-self: center;">Monto a abonar:</span>
-              <span class="price-tag">$${Number(data.monto).toLocaleString('es-AR')}</span>
+            <div class="info-row">
+              <span class="info-label">Estado:</span>
+              <span class="info-value" style="color: #0284c7;">Verificando acreditación...</span>
             </div>
           </div>
 
+          <div style="text-align: center; margin: 1.5rem 0;">
+            <div class="loader" style="margin: 0.5rem auto 1rem;"></div>
+            <p style="font-size: 0.85rem; color: #64748b;">
+              Esperando confirmación médica. No es necesario recargar la página.
+            </p>
+          </div>
+
+          <a href="https://wa.me/?text=${waMsg}" target="_blank" class="btn btn-wa-notify">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            Avisar o enviar comprobante por WhatsApp
+          </a>
+        `;
+        return;
+      }
+
+      // CASO 3: PENDIENTE DE PAGO (OPCIÓN MERCADO PAGO Y TRANSFERENCIA BANCARIA)
+      const montoFmt = Number(data.monto).toLocaleString('es-AR');
+      const alias = currentBankConfig.alias || 'lnd.longoni.uala';
+      const titular = currentBankConfig.titular || 'Leandro Longoni';
+      const banco = currentBankConfig.banco || 'Ualá';
+
+      contentArea.innerHTML = `
+        <!-- AVISO GRÁFICO ENFÁTICO DEL LÍMITE DE 5 MINUTOS -->
+        <div class="urgent-banner">
+          <div class="urgent-icon">⚠️</div>
+          <div>
+            <div class="urgent-title">Aviso importante al paciente</div>
+            <div class="urgent-text">
+              Una vez acreditado o aprobado el pago (sea por Mercado Pago o Transferencia), dispondrás de una ventana estricta de <strong>5 MINUTOS</strong> para descargar y guardar tu receta médica. Luego el enlace se desactivará por seguridad.
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-row">
+            <span class="info-label">Paciente:</span>
+            <span class="info-value">${data.pacienteNombre}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Concepto:</span>
+            <span class="info-value">Receta Médica / Consulta</span>
+          </div>
+          <div class="info-row" style="margin-top: 0.6rem; border-top: 1px dashed #cbd5e1; padding-top: 0.6rem;">
+            <span class="info-label" style="align-self: center;">Total a abonar:</span>
+            <span class="price-tag">$${montoFmt}</span>
+          </div>
+        </div>
+
+        <div class="tabs-label">Selecciona cómo deseas abonar:</div>
+        
+        <div class="tabs-header">
+          <button type="button" class="tab-btn active" id="tabBtnTransfer" onclick="switchTab('transfer')">
+            🏦 Transferencia (Alias)
+          </button>
+          <button type="button" class="tab-btn" id="tabBtnMP" onclick="switchTab('mp')">
+            💳 Mercado Pago
+          </button>
+        </div>
+
+        <!-- PESTAÑA 1: TRANSFERENCIA BANCARIA (ALIAS / CVU) -->
+        <div class="tab-pane active" id="tabTransfer">
+          <div class="bank-card">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+              Datos para transferir:
+            </div>
+
+            <div class="alias-box">
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; margin-bottom: 0.2rem;">
+                Alias / CVU
+              </div>
+              <div class="alias-text" id="aliasDisplay">${alias}</div>
+              <button type="button" class="btn-copy-alias" id="btnCopyAlias" onclick="copyAlias('${alias}')">
+                📋 Copiar Alias
+              </button>
+            </div>
+
+            <div class="bank-detail-row">
+              <span style="color: #64748b;">Billetera / Banco:</span>
+              <span style="font-weight: 600; color: #1e293b;">${banco}</span>
+            </div>
+            <div class="bank-detail-row">
+              <span style="color: #64748b;">Titular:</span>
+              <span style="font-weight: 600; color: #1e293b;">${titular}</span>
+            </div>
+            <div class="bank-detail-row">
+              <span style="color: #64748b;">Monto exacto:</span>
+              <span style="font-weight: 700; color: #0284c7;">$${montoFmt}</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-transfer-confirm" id="btnReportTransfer" onclick="reportTransfer()">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+            Ya realicé la transferencia
+          </button>
+        </div>
+
+        <!-- PESTAÑA 2: MERCADO PAGO -->
+        <div class="tab-pane" id="tabMP">
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.75rem;">
+            Abona al instante con tarjeta de débito, crédito o dinero en cuenta de Mercado Pago:
+          </p>
           <a href="${data.mpInitPoint}" class="btn btn-mp" id="btnPayMP">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
             </svg>
             Pagar con Mercado Pago
           </a>
+        </div>
 
-          <div class="security-note">
-            🛡️ Pago procesado de forma 100% segura por Mercado Pago
-          </div>
-        `;
+        <div class="security-note">
+          🛡️ Transacción médica protegida y segura
+        </div>
+      `;
+    }
+
+    function switchTab(tab) {
+      const btnTransfer = document.getElementById('tabBtnTransfer');
+      const btnMP = document.getElementById('tabBtnMP');
+      const paneTransfer = document.getElementById('tabTransfer');
+      const paneMP = document.getElementById('tabMP');
+
+      if (!btnTransfer || !btnMP) return;
+
+      if (tab === 'transfer') {
+        btnTransfer.classList.add('active');
+        btnMP.classList.remove('active');
+        paneTransfer.classList.add('active');
+        paneMP.classList.remove('active');
+      } else {
+        btnMP.classList.add('active');
+        btnTransfer.classList.remove('active');
+        paneMP.classList.add('active');
+        paneTransfer.classList.remove('active');
       }
     }
 
-    let pollInterval = null;
+    function copyAlias(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btnCopyAlias');
+        if (btn) {
+          btn.innerHTML = '✓ ¡Copiado!';
+          btn.style.background = '#dcfce7';
+          btn.style.color = '#15803d';
+          setTimeout(() => {
+            btn.innerHTML = '📋 Copiar Alias';
+            btn.style.background = '#e0f2fe';
+            btn.style.color = '#0284c7';
+          }, 2500);
+        }
+      });
+    }
+
+    async function reportTransfer() {
+      const btn = document.getElementById('btnReportTransfer');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = 'Informando al médico...';
+      }
+
+      try {
+        const res = await fetch(`/api/recetas/${recetaId}/report-transfer`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ note: 'Transferencia realizada por el paciente' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          cargarEstado();
+        } else {
+          alert(data.error || 'No se pudo registrar la transferencia');
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = 'Ya realicé la transferencia';
+          }
+        }
+      } catch (err) {
+        alert('Error de conexión: ' + err.message);
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = 'Ya realicé la transferencia';
+        }
+      }
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const paymentId = urlParams.get('payment_id') || urlParams.get('collection_id');
     const status = urlParams.get('status') || urlParams.get('collection_status');
@@ -376,7 +764,7 @@
       cargarEstado();
     }
 
-    // Auto-actualizar cada 4 segundos por si el webhook se procesa mientras el paciente tiene la pantalla abierta
+    // Auto-actualizar cada 3 segundos por si se aprueba mientras el paciente tiene la pantalla abierta
     pollInterval = setInterval(() => {
       fetch(`/api/recetas/${recetaId}`)
         .then(r => r.json())
@@ -387,7 +775,7 @@
           }
         })
         .catch(() => {});
-    }, 4000);
+    }, 3000);
   </script>
 </body>
 </html>

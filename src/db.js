@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -27,6 +27,37 @@ function saveDB(db) {
     fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
   } catch (err) {
     console.error('Error guardando base de datos:', err);
+  }
+}
+
+const CONFIG_FILE = path.join(DATA_DIR, 'config.json');
+
+const DEFAULT_BANK_CONFIG = {
+  alias: 'lnd.longoni.uala',
+  cvu: 'lnd.longoni.uala',
+  titular: 'Leandro Longoni',
+  banco: 'Ualá'
+};
+
+function loadConfig() {
+  try {
+    if (!fs.existsSync(CONFIG_FILE)) {
+      fs.writeFileSync(CONFIG_FILE, JSON.stringify(DEFAULT_BANK_CONFIG, null, 2));
+      return DEFAULT_BANK_CONFIG;
+    }
+    const data = fs.readFileSync(CONFIG_FILE, 'utf8');
+    return { ...DEFAULT_BANK_CONFIG, ...JSON.parse(data || '{}') };
+  } catch (err) {
+    console.error('Error leyendo config:', err);
+    return DEFAULT_BANK_CONFIG;
+  }
+}
+
+function saveConfig(cfg) {
+  try {
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg, null, 2));
+  } catch (err) {
+    console.error('Error guardando config:', err);
   }
 }
 
@@ -59,5 +90,23 @@ module.exports = {
   list() {
     const db = loadDB();
     return Object.values(db);
+  },
+
+  getPendingTransfers() {
+    const db = loadDB();
+    return Object.values(db)
+      .filter(r => r.status === 'transfer_pending')
+      .sort((a, b) => new Date(b.transferReportedAt || 0) - new Date(a.transferReportedAt || 0));
+  },
+
+  getBankConfig() {
+    return loadConfig();
+  },
+
+  updateBankConfig(updates) {
+    const current = loadConfig();
+    const updated = { ...current, ...updates };
+    saveConfig(updated);
+    return updated;
   }
 };
