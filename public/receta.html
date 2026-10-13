@@ -612,16 +612,29 @@
         <div class="tabs-label">Selecciona cómo deseas abonar:</div>
         
         <div class="tabs-header">
-          <button type="button" class="tab-btn active" id="tabBtnTransfer" onclick="switchTab('transfer')">
-            🏦 Transferencia (Alias)
-          </button>
-          <button type="button" class="tab-btn" id="tabBtnMP" onclick="switchTab('mp')">
+          <button type="button" class="tab-btn active" id="tabBtnMP" onclick="switchTab('mp')">
             💳 Mercado Pago
+          </button>
+          <button type="button" class="tab-btn" id="tabBtnTransfer" onclick="switchTab('transfer')">
+            🏦 Transferencia (Alias)
           </button>
         </div>
 
-        <!-- PESTAÑA 1: TRANSFERENCIA BANCARIA (ALIAS / CVU) -->
-        <div class="tab-pane active" id="tabTransfer">
+        <!-- PESTAÑA 1: MERCADO PAGO (PREDETERMINADA) -->
+        <div class="tab-pane active" id="tabMP">
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.75rem;">
+            Abona al instante con tarjeta de débito, crédito o dinero en cuenta de Mercado Pago:
+          </p>
+          <a href="${data.mpInitPoint}" class="btn btn-mp" id="btnPayMP">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            Pagar con Mercado Pago
+          </a>
+        </div>
+
+        <!-- PESTAÑA 2: TRANSFERENCIA BANCARIA (ALIAS / CVU) -->
+        <div class="tab-pane" id="tabTransfer">
           <div class="bank-card">
             <div style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
               Datos para transferir:
@@ -657,19 +670,6 @@
             </svg>
             Ya realicé la transferencia
           </button>
-        </div>
-
-        <!-- PESTAÑA 2: MERCADO PAGO -->
-        <div class="tab-pane" id="tabMP">
-          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.75rem;">
-            Abona al instante con tarjeta de débito, crédito o dinero en cuenta de Mercado Pago:
-          </p>
-          <a href="${data.mpInitPoint}" class="btn btn-mp" id="btnPayMP">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-            </svg>
-            Pagar con Mercado Pago
-          </a>
         </div>
 
         <div class="security-note">

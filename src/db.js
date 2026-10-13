@@ -99,6 +99,14 @@ module.exports = {
       .sort((a, b) => new Date(b.transferReportedAt || 0) - new Date(a.transferReportedAt || 0));
   },
 
+  getRecentPayments(maxAgeHours = 24) {
+    const db = loadDB();
+    const cutoff = Date.now() - (maxAgeHours * 60 * 60 * 1000);
+    return Object.values(db)
+      .filter(r => r.status === 'approved' && r.paidAt && new Date(r.paidAt).getTime() >= cutoff)
+      .sort((a, b) => new Date(b.paidAt || 0) - new Date(a.paidAt || 0));
+  },
+
   getBankConfig() {
     return loadConfig();
   },

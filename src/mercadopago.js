@@ -17,7 +17,7 @@ function getClient() {
   return null;
 }
 
-async function crearPreferencia({ recetaId, pacienteNombre, monto, baseUrl }) {
+async function crearPreferencia({ recetaId, pacienteNombre, monto, email, telefono, baseUrl }) {
   const client = getClient();
   if (!client) {
     console.log('[MercadoPago] Modo simulado (Token MP_ACCESS_TOKEN no configurado en entorno).');
@@ -30,25 +30,34 @@ async function crearPreferencia({ recetaId, pacienteNombre, monto, baseUrl }) {
 
   try {
     const preference = new Preference(client);
+    const cleanNombre = (pacienteNombre || 'Paciente').replace(/[^a-zA-Z0-9 áéíóúÁÉÍÓÚñÑ]/g, '').trim().slice(0, 30);
     const body = {
       items: [
         {
           id: recetaId,
-          title: `Receta Médica - ${pacienteNombre}`,
+          title: `Receta Medica - ${cleanNombre}`,
           quantity: 1,
           unit_price: Number(monto),
           currency_id: process.env.MP_CURRENCY_ID || 'ARS'
         }
       ],
       back_urls: {
-        success: `${baseUrl}/receta/${recetaId}?status=approved`,
-        failure: `${baseUrl}/receta/${recetaId}?status=failure`,
-        pending: `${baseUrl}/receta/${recetaId}?status=pending`
+        success: `${baseUrl}/receta/${recetaId}`,
+        failure: `${baseUrl}/receta/${recetaId}`,
+        pending: `${baseUrl}/receta/${recetaId}`
       },
       auto_return: 'approved',
+      binary_mode: true,
+      statement_descriptor: 'RECETA MEDICA',
       notification_url: `${baseUrl}/api/webhooks/mercadopago`,
       external_reference: recetaId
     };
+
+    if (email && email.includes('@')) {
+      body.payer = {
+        email: email.trim()
+      };
+    }
 
     const response = await preference.create({ body });
     return {

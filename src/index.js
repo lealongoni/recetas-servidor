@@ -78,6 +78,8 @@ app.post('/api/recetas/upload', upload.single('pdf'), async (req, res) => {
       recetaId,
       pacienteNombre,
       monto,
+      email,
+      telefono,
       baseUrl
     });
 
@@ -121,6 +123,22 @@ app.post('/api/recetas/upload', upload.single('pdf'), async (req, res) => {
     console.error('Error al subir receta:', error);
     return res.status(500).json({ error: 'Error interno al procesar la receta: ' + error.message });
   }
+});
+
+// LISTAR TRANSFERENCIAS PENDIENTES (Debe registrarse antes de /api/recetas/:id)
+app.get('/api/recetas/pending-transfers', (req, res) => {
+  res.json(db.getPendingTransfers());
+});
+
+// ACTIVIDAD RECIENTE Y NOTIFICACIONES (Tanto transferencias pendientes como pagos aprobados)
+app.get('/api/recetas/recent-activity', (req, res) => {
+  const pendingTransfers = db.getPendingTransfers();
+  const recentPayments = db.getRecentPayments(24);
+  res.json({
+    pendingTransfers,
+    recentPayments,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // 2. OBTENER INFORMACIÓN DE LA RECETA (Para el portal del paciente)
@@ -267,11 +285,6 @@ app.post('/api/recetas/:id/report-transfer', (req, res) => {
 
   console.log(`[Transferencia Informada] Receta ${receta.id} de ${receta.pacienteNombre} por $${receta.monto}`);
   res.json({ success: true, receta: updated });
-});
-
-// 6. LISTAR TRANSFERENCIAS PENDIENTES (Para la app y panel médico)
-app.get('/api/recetas/pending-transfers', (req, res) => {
-  res.json(db.getPendingTransfers());
 });
 
 // 7. APROBAR TRANSFERENCIA (La secretaria/médico toca "Aprobar")
